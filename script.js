@@ -2,22 +2,31 @@
 const cursor = document.querySelector('.cursor');
 const follower = document.querySelector('.cursor-follower');
 
-document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
+if (cursor && follower) {
+    let followerX = 0, followerY = 0;
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        followerX = e.clientX - 10;
+        followerY = e.clientY - 10;
+    });
 
-    setTimeout(() => {
-        follower.style.left = e.clientX - 10 + 'px';
-        follower.style.top = e.clientY - 10 + 'px';
-    }, 100);
-});
+    function updateFollower() {
+        follower.style.left = followerX + 'px';
+        follower.style.top = followerY + 'px';
+        requestAnimationFrame(updateFollower);
+    }
+    updateFollower();
+}
 
 // Create floating particles
 function createParticles() {
     const particlesContainer = document.getElementById('particles');
     if (!particlesContainer) return;
+    particlesContainer.innerHTML = '';
     const particleCount = 50;
     const symbols = ['⚡', '✨', '💫', '🌟', '⭐', '🔷', '🔶'];
+    const symbolsLength = symbols.length;
 
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
@@ -26,7 +35,7 @@ function createParticles() {
         particle.style.animationDelay = Math.random() * 20 + 's';
         particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
         particle.style.fontSize = Math.random() * 20 + 10 + 'px';
-        particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        particle.textContent = symbols[Math.floor(Math.random() * symbolsLength)];
         particlesContainer.appendChild(particle);
     }
 }
@@ -59,6 +68,13 @@ window.addEventListener('load', () => {
 });
 
 // Intersection Observer for scroll-based animations
+document.querySelectorAll('.skills-grid').forEach(grid => {
+    const cards = grid.querySelectorAll('.skill-card');
+    cards.forEach((card, index) => {
+        card.dataset.index = index;
+    });
+});
+
 const animatedElements = document.querySelectorAll('.section, .timeline-item, .skill-card');
 
 const observer = new IntersectionObserver((entries, observer) => {
@@ -74,49 +90,40 @@ const observer = new IntersectionObserver((entries, observer) => {
     });
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-document.querySelectorAll('.skills-grid').forEach(grid => {
-    const cards = grid.querySelectorAll('.skill-card');
-    cards.forEach((card, index) => {
-        card.dataset.index = index;
-    });
-});
-
 animatedElements.forEach(el => {
     observer.observe(el);
 });
 
 
 // Parallax effect with zoom on scroll
+let lastScroll = 0;
 window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const parallax = document.querySelector('.bg-animation');
-    if (parallax) {
-        parallax.style.transform = `translateY(${scrolled * 0.4}px) scale(${1 + scrolled * 0.0001})`;
-    }
+    lastScroll = window.pageYOffset;
+    requestAnimationFrame(() => {
+        const parallax = document.querySelector('.bg-animation');
+        if (parallax) {
+            parallax.style.transform = `translateY(${lastScroll * 0.4}px) scale(${1 + lastScroll * 0.0001})`;
+        }
+    });
 });
 
-// Keyboard navigation
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowDown') {
-        const currentSection = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2).closest('.section');
-        const nextSection = currentSection?.nextElementSibling;
-        if (nextSection && nextSection.classList.contains('section')) {
-            nextSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    } else if (e.key === 'ArrowUp') {
-        const currentSection = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2).closest('.section');
-        const prevSection = currentSection?.previousElementSibling;
-        if (prevSection && prevSection.classList.contains('section')) {
-            prevSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-});
-
-// Easter egg
+// Keyboard navigation and Easter egg
 const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 let konamiIndex = 0;
 
 document.addEventListener('keydown', (e) => {
+    // Keyboard navigation
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        const currentSection = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2).closest('.section');
+        if (currentSection) {
+            const nextSection = e.key === 'ArrowDown' ? currentSection.nextElementSibling : currentSection.previousElementSibling;
+            if (nextSection && nextSection.classList.contains('section')) {
+                nextSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }
+
+    // Easter egg
     if (e.key.toLowerCase() === konamiCode[konamiIndex]) {
         konamiIndex++;
         if (konamiIndex === konamiCode.length) {
