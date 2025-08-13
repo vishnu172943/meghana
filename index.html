@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meghana Peddholla - Digital Canvas</title>
+    <title>Meghana Peddholla - Enhanced Digital Canvas</title>
     <style>
         * {
             margin: 0;
@@ -12,12 +12,13 @@
         }
 
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.2);
             --text-primary: rgba(255, 255, 255, 0.95);
-            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-secondary: rgba(255, 255, 255, 0.75);
             --accent: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --glow: 0 0 40px rgba(102, 126, 234, 0.5);
+            /* ENHANCED: Stronger, layered glow for more depth */
+            --glow: 0 0 15px rgba(102, 126, 234, 0.4), 0 0 45px rgba(118, 75, 162, 0.3);
         }
 
         body {
@@ -29,7 +30,7 @@
         }
 
         /* Custom Cursor */
-        .cursor {
+        .cursor, .cursor-follower {
             width: 20px;
             height: 20px;
             border: 2px solid rgba(255, 255, 255, 0.7);
@@ -45,9 +46,7 @@
             width: 40px;
             height: 40px;
             background: rgba(102, 126, 234, 0.1);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
+            border: none;
             z-index: 9998;
             transition: all 0.3s ease;
         }
@@ -63,6 +62,7 @@
             background: linear-gradient(45deg, #0a0a0a, #1a1a2e, #16213e, #0f3460);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
+            transition: transform 0.1s linear;
         }
 
         @keyframes gradientShift {
@@ -75,19 +75,17 @@
         .particle {
             position: fixed;
             pointer-events: none;
-            opacity: 0.5;
-            animation: float 20s infinite linear;
+            opacity: 0;
+            animation: float-particle 20s infinite linear;
         }
 
-        @keyframes float {
+        @keyframes float-particle {
             from {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
+                transform: translateY(100vh) translateX(0vw) rotate(0deg);
+                opacity: 0.5;
             }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.5; }
             to {
-                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                transform: translateY(-100vh) translateX(5vw) rotate(720deg);
                 opacity: 0;
             }
         }
@@ -109,6 +107,7 @@
             gap: 30px;
             box-shadow: var(--glow);
             animation: navFloat 3s ease-in-out infinite;
+            transition: padding 0.3s ease, gap 0.3s ease;
         }
 
         @keyframes navFloat {
@@ -125,7 +124,7 @@
 
         .nav-item:hover {
             transform: scale(1.1);
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 25px rgba(102, 126, 234, 0.8);
         }
 
         .nav-item::after {
@@ -136,11 +135,12 @@
             width: 0;
             height: 2px;
             background: var(--accent);
-            transition: width 0.3s ease;
+            transition: width 0.3s ease, box-shadow 0.3s ease;
         }
 
         .nav-item:hover::after {
             width: 100%;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.7);
         }
 
         /* Hero Section */
@@ -151,6 +151,7 @@
             justify-content: center;
             position: relative;
             perspective: 1000px;
+            padding: 0 15px; /* Add padding for small screens */
         }
 
         .hero-card {
@@ -161,9 +162,11 @@
             border-radius: 30px;
             padding: 60px;
             max-width: 800px;
+            width: 100%;
             transform-style: preserve-3d;
             animation: heroRotate 20s infinite linear;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            text-align: center;
         }
 
         @keyframes heroRotate {
@@ -183,22 +186,17 @@
                 0.05em 0 0 rgba(255, 0, 0, 0.75),
                 -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
                 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
-            animation: glitch 1s infinite;
+            animation: glitch 1s infinite, flicker 0.2s infinite;
         }
-
+        
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.8; }
+        }
+        
         @keyframes glitch {
-            0%, 100% {
-                text-shadow: 
-                    0.05em 0 0 rgba(255, 0, 0, 0.75),
-                    -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
-                    0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
-            }
-            25% {
-                text-shadow: 
-                    -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
-                    0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
-                    -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
-            }
+            0%, 100% { text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0 rgba(0, 0, 255, 0.75); }
+            25% { text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75); }
         }
 
         .subtitle {
@@ -218,10 +216,18 @@
         /* Sections */
         .section {
             min-height: 100vh;
-            padding: 100px 20px;
+            padding: 120px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .section.in-view {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .glass-container {
@@ -235,6 +241,7 @@
             width: 100%;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--glow), inset 0 0 2px 1px rgba(255, 255, 255, 0.05);
         }
 
         .glass-container::before {
@@ -244,17 +251,24 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-                circle,
-                rgba(102, 126, 234, 0.1) 0%,
-                transparent 70%
-            );
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
             animation: rotate 30s linear infinite;
         }
 
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
+        }
+        
+        .section-title {
+            font-size: 3rem; 
+            margin-bottom: 30px; 
+            text-align: center;
+            text-shadow: 
+                0 0 10px rgba(102, 126, 234, 0.8),
+                0 0 20px rgba(102, 126, 234, 0.6),
+                0 0 30px rgba(102, 126, 234, 0.4),
+                0 0 40px rgba(102, 126, 234, 0.2);
         }
 
         /* Skills Cards */
@@ -278,6 +292,13 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .skill-card.in-view {
+             opacity: 1;
+             transform: translateY(0);
         }
 
         .skill-card::before {
@@ -329,14 +350,12 @@
             position: relative;
             margin: 50px 0;
             opacity: 0;
-            animation: fadeInUp 1s forwards;
+            transform: translateY(50px);
+            transition: opacity 1s ease, transform 1s ease;
         }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .timeline-item.in-view {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .timeline-content {
@@ -394,7 +413,31 @@
             transform: scale(1.05) rotateZ(2deg);
             background: rgba(102, 126, 234, 0.1);
         }
+        
+        .interactive-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: badgeFloat 4s ease-in-out infinite;
+        }
+        
+        .interactive-badge:hover {
+            transform: translateY(-5px);
+            background: rgba(102, 126, 234, 0.2);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
 
+        @keyframes badgeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
         /* Floating Action Button */
         .fab {
             position: fixed;
@@ -415,30 +458,6 @@
 
         .fab:hover {
             transform: scale(1.1) rotate(180deg);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero-card {
-                padding: 30px;
-            }
-            
-            .glitch-text {
-                font-size: 2.5rem;
-            }
-            
-            .timeline-content {
-                width: 90%;
-                margin: 0 auto !important;
-            }
-            
-            .timeline::before {
-                left: 20px;
-            }
-            
-            .timeline-dot {
-                left: 20px;
-            }
         }
 
         /* Loading Screen */
@@ -469,63 +488,111 @@
             0%, 100% { opacity: 0.5; }
             50% { opacity: 1; }
         }
+        
+        /*
+        ## RESPONSIVE DESIGN ##
+        */
 
-        /* Interactive Elements */
-        .interactive-badge {
-            display: inline-block;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            margin: 5px;
-            transition: all 0.3s ease;
-            cursor: pointer;
+        /* Tablet and Large Phones */
+        @media (max-width: 768px) {
+            /* Hide custom cursor on touch devices for better UX */
+            .cursor, .cursor-follower {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+
+            .nav-glass {
+                padding: 10px 15px;
+                gap: 15px;
+            }
+            .nav-item {
+                padding: 5px;
+            }
+
+            .section {
+                padding: 100px 15px;
+            }
+            .glass-container, .hero-card {
+                padding: 30px;
+            }
+            .glitch-text {
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            .section-title {
+                font-size: 2.5rem;
+            }
+            .timeline-content {
+                width: 90%;
+                margin: 0 auto !important;
+            }
+            .timeline::before {
+                left: 20px;
+                transform: translateX(0);
+            }
+            .timeline-dot {
+                left: 20px;
+                transform: translate(-50%, -50%);
+            }
         }
 
-        .interactive-badge:hover {
-            transform: translateY(-5px);
-            background: rgba(102, 126, 234, 0.2);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
+        /* Small Mobile Phones */
+        @media (max-width: 480px) {
+            .nav-glass {
+                gap: 5px;
+                padding: 8px 10px;
+            }
+            .nav-item {
+                font-size: 0.9rem;
+            }
+            
+            .hero-card {
+                padding: 25px 20px;
+            }
+            .glitch-text {
+                font-size: 2rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+                line-height: 1.4;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
 
-        /* 3D Card Effect */
-        .card-3d {
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-        }
+            .interactive-badge {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
 
-        .card-3d:hover {
-            transform: rotateY(10deg) rotateX(10deg);
-        }
-
-        /* Neon Text */
-        .neon-text {
-            text-shadow: 
-                0 0 10px rgba(102, 126, 234, 0.8),
-                0 0 20px rgba(102, 126, 234, 0.6),
-                0 0 30px rgba(102, 126, 234, 0.4),
-                0 0 40px rgba(102, 126, 234, 0.2);
+            .fab {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+            }
+            .fab span {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Custom Cursor -->
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
-    <!-- Loading Screen -->
     <div class="loader" id="loader">
         <div class="loader-text">Initializing Portfolio...</div>
     </div>
 
-    <!-- Animated Background -->
     <div class="bg-animation"></div>
     
-    <!-- Floating Particles -->
     <div id="particles"></div>
 
-    <!-- Navigation -->
     <nav class="nav-glass">
         <div class="nav-item" onclick="scrollToSection('hero')">Home</div>
         <div class="nav-item" onclick="scrollToSection('about')">About</div>
@@ -534,9 +601,8 @@
         <div class="nav-item" onclick="scrollToSection('contact')">Contact</div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-card card-3d">
+    <section class="hero section" id="hero">
+        <div class="hero-card">
             <h1 class="glitch-text">MEGHANA</h1>
             <p class="subtitle">Process Executive • Apple Maps Specialist • Content Moderator</p>
             <div style="margin-top: 30px;">
@@ -547,10 +613,9 @@
         </div>
     </section>
 
-    <!-- About Section -->
     <section class="section" id="about">
         <div class="glass-container">
-            <h2 class="neon-text" style="font-size: 3rem; margin-bottom: 30px; text-align: center;">About Me</h2>
+            <h2 class="section-title">About Me</h2>
             <p style="font-size: 1.2rem; line-height: 1.8; text-align: center; max-width: 800px; margin: 0 auto;">
                 I am an enthusiastic, self-motivated, responsible and hard-working person. 
                 Experienced Process Executive with 1.8 years in Apple mapping including Review and Research on Natural Disasters. 
@@ -566,10 +631,9 @@
         </div>
     </section>
 
-    <!-- Skills Section -->
     <section class="section" id="skills">
         <div class="glass-container">
-            <h2 class="neon-text" style="font-size: 3rem; margin-bottom: 30px; text-align: center;">Skills & Expertise</h2>
+            <h2 class="section-title">Skills & Expertise</h2>
             
             <h3 style="margin-top: 40px; margin-bottom: 20px; text-align: center;">Technical Skills</h3>
             <div class="skills-grid">
@@ -624,10 +688,9 @@
         </div>
     </section>
 
-    <!-- Experience Section -->
     <section class="section" id="experience">
         <div class="glass-container">
-            <h2 class="neon-text" style="font-size: 3rem; margin-bottom: 50px; text-align: center;">Experience Journey</h2>
+            <h2 class="section-title">Experience Journey</h2>
             
             <div class="timeline">
                 <div class="timeline-item">
@@ -658,10 +721,9 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section class="section" id="contact">
         <div class="glass-container">
-            <h2 class="neon-text" style="font-size: 3rem; margin-bottom: 30px; text-align: center;">Let's Connect</h2>
+            <h2 class="section-title">Let's Connect</h2>
             
             <div class="contact-grid">
                 <div class="contact-card" onclick="window.location.href='mailto:reddymeghana0604@gmail.com'">
@@ -691,7 +753,6 @@
         </div>
     </section>
 
-    <!-- Floating Action Button -->
     <div class="fab" onclick="scrollToTop()">
         <span style="font-size: 1.5rem;">↑</span>
     </div>
@@ -714,6 +775,7 @@
         // Create floating particles
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
             const particleCount = 50;
             const symbols = ['⚡', '✨', '💫', '🌟', '⭐', '🔷', '🔶'];
             
@@ -722,6 +784,7 @@
                 particle.className = 'particle';
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
                 particle.style.fontSize = Math.random() * 20 + 10 + 'px';
                 particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
                 particlesContainer.appendChild(particle);
@@ -738,7 +801,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Remove loader after page loads
+        // Window load events
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const loader = document.getElementById('loader');
@@ -749,92 +812,50 @@
             }, 1500);
             
             createParticles();
+            
+            document.querySelectorAll('.interactive-badge').forEach(badge => {
+                badge.style.animationDelay = `${Math.random() * 4}s`;
+            });
         });
 
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
+        // Intersection Observer for scroll-based animations
+        const animatedElements = document.querySelectorAll('.section, .timeline-item, .skill-card');
+        
+        const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.classList.add('in-view');
+                    if (entry.target.classList.contains('skill-card')) {
+                       const delay = entry.target.dataset.index * 100;
+                       entry.target.style.transitionDelay = `${delay}ms`;
+                    }
+                    observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
-
-        // Observe all timeline items
-        document.querySelectorAll('.timeline-item').forEach(item => {
-            item.style.opacity = '0';
-            item.style.transform = 'translateY(50px)';
-            item.style.transition = 'all 0.8s ease';
-            observer.observe(item);
-        });
-
-        // Interactive hover effects
-        document.querySelectorAll('.skill-card, .contact-card').forEach(card => {
-            card.addEventListener('mouseenter', function(e) {
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const ripple = document.createElement('div');
-                ripple.style.position = 'absolute';
-                ripple.style.width = '20px';
-                ripple.style.height = '20px';
-                ripple.style.background = 'rgba(255, 255, 255, 0.5)';
-                ripple.style.borderRadius = '50%';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-                ripple.style.transform = 'translate(-50%, -50%)';
-                ripple.style.animation = 'ripple 0.6s ease-out';
-                
-                this.appendChild(ripple);
-                
-                setTimeout(() => ripple.remove(), 600);
-            });
-        });
-
-        // Add ripple animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    width: 200px;
-                    height: 200px;
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Dynamic typing effect for hero text
-        const heroText = document.querySelector('.glitch-text');
-        const originalText = heroText.textContent;
-        let charIndex = 0;
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
         
-        function typeWriter() {
-            if (charIndex < originalText.length) {
-                heroText.textContent = originalText.slice(0, charIndex + 1);
-                charIndex++;
-                setTimeout(typeWriter, 100);
-            }
-        }
+        document.querySelectorAll('.skills-grid').forEach(grid => {
+            const cards = grid.querySelectorAll('.skill-card');
+            cards.forEach((card, index) => {
+                card.dataset.index = index;
+            });
+        });
+        
+        animatedElements.forEach(el => {
+            observer.observe(el);
+        });
+        
 
-        // Start typing effect after loader
-        setTimeout(typeWriter, 2000);
-
-        // Parallax effect on scroll
+        // Parallax effect with zoom on scroll
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             const parallax = document.querySelector('.bg-animation');
-            parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.4}px) scale(${1 + scrolled * 0.0001})`;
+            }
         });
 
-        // Add keyboard navigation
+        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowDown') {
                 const currentSection = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2).closest('.section');
@@ -851,12 +872,12 @@
             }
         });
 
-        // Easter egg: Konami code
+        // Easter egg
         const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
         let konamiIndex = 0;
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === konamiCode[konamiIndex]) {
+            if (e.key.toLowerCase() === konamiCode[konamiIndex]) {
                 konamiIndex++;
                 if (konamiIndex === konamiCode.length) {
                     alert('🎉 Congratulations! You found the secret! Welcome to the Matrix! 🎉');
